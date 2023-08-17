@@ -33,6 +33,8 @@
         <link rel="stylesheet" type="text/css" href="{{asset('Hover-master/css/hover.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('css/jquery.steps.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('css/select-personalizado.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/avnSkeleton/avnSkeleton.css') }}">
+
 
         <!-- HOVER-MASTER CSS-->
 

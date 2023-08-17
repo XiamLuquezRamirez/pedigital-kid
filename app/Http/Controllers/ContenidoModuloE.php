@@ -24,6 +24,237 @@ class ContenidoModuloE extends Controller
         }
     }
 
+    public function CargarSimulacros()
+    {
+
+        return view('ModuloE.PrincipalSimulacro');
+
+    }
+
+    public function ConsultarSimulacros()
+    {
+        if (Auth::check()) {
+
+          $Simualacros = \App\Simulacros::CargarSimulacros();
+            for ($i = 0; $i < count($Simualacros); $i++) {
+                $DetaSesionxsimulacro = \App\DetaSesionesSimul::ConsultarSesiones($Simualacros[$i]['id']);
+                $Simualacros[$i]['SesionesxSimulacro'] = $DetaSesionxsimulacro;
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'Simualacros' => $Simualacros,
+                ]);
+            }
+        } else {
+            return redirect('/')->with('error', 'Su sesión ha Terminado');
+        }
+    }
+
+    public function ConsultarSesiones()
+    {
+
+        if (Auth::check()) {
+
+            $idSimu = request()->get('idSimu');
+            $Simulacro = \App\Simulacros::BuscarSimuxEstu($idSimu);
+            $Sesiones = \App\DetaSesionesSimul::ConsultarSesiones($idSimu);
+
+            for ($i = 0; $i < $Sesiones->count(); $i++) {
+                $DetaSesionAreas = \App\SessionArea::Consultar($Sesiones[$i]['id']);
+                $Sesiones[$i]['AreasxSesiones'] = $DetaSesionAreas;
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'Simulacro' => $Simulacro,
+                    'Sesiones' => $Sesiones,
+                ]);
+            }
+        } else {
+            return redirect('/')->with('error', 'Su sesión ha Terminado');
+        }
+    }
+
+    public function ConsultarAreasxSesion()
+    {
+        if (Auth::check()) {
+            $idAreaSes = request()->get('idSesi');
+            $Sesion = \App\DetaSesionesSimul::ConsultarSesion($idAreaSes);
+            $SesAre = \App\SessionArea::ConsultarAreasSesion($idAreaSes);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'SesAre' => $SesAre,
+                    'Sesion' => $Sesion,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+
+    public function ConsultarPreguntasAreas()
+    {
+
+        if (Auth::check()) {
+            $datos = request()->all();
+
+            $idArea = $datos['idAreaSesion'];
+            $areaxsesion = \App\SessionArea::ConsultarInf($idArea);
+            ////MODIFICAR CONSULTA QUE TRAE LAS PREGUNTAS DE INGLES
+            if ($areaxsesion->area == "5") {
+                $PregArea = \App\ModE_PreguntAreas::ConsultarInfIngles($idArea, "Est");
+            } else {
+                $PregArea = \App\ModE_PreguntAreas::ConsultarInf($idArea);
+            }
+
+
+
+
+            //    $PregArea = \App\ModE_PreguntAreas::ConsultarInf($idArea);
+            if (request()->ajax()) {
+                return response()->json([
+                    'PregArea' => $PregArea,
+                    'areaxsesion' => $areaxsesion,
+
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function consulPregAlumnoSimu()
+    {
+        if (Auth::check()) {
+            $IdPreg = request()->get('Pregunta');
+            $partePreg = request()->get('partePreg');
+            $sesion = request()->get('sesionId');
+
+
+            if ($partePreg == "PARTE 1") {
+                $PregMult = \App\PreguntasParte1::ConsultarPregParte($IdPreg);
+                $OpciMult =  \App\PregOpcMulMe::ConsulPreg($PregMult->parte);
+                $opciMultCompe = $OpciMult->competencia;
+                $opciMultCompo = $OpciMult->componente;
+                $OpciMult = $OpciMult->pregunta;
+
+                $RespPregMul = \App\PreguntasParte1::BuscOpcRespPruebaParte($IdPreg, Auth::user()->id, $sesion);
+            } else {
+                $PregMult = \App\PregOpcMulMe::ConsulPreg($IdPreg);
+                $OpciMult = \App\OpcPregMulModuloE::ConsulGrupOpcPreg($IdPreg);
+                $opciMultCompe = $PregMult->competencia;
+                $opciMultCompo = $PregMult->componente;
+                $RespPregMul = \App\OpcPregMulModuloE::BuscOpcRespPrueba($IdPreg, Auth::user()->id, $sesion);
+            }
+
+
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'PregMult' => $PregMult,
+                    'OpciMult' => $OpciMult,
+                    'RespPregMul' => $RespPregMul,
+                    'opciMultCompe' => $opciMultCompe,
+                    'opciMultCompo' => $opciMultCompo,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+
+    public function RespSimulacro()
+    {
+        if (Auth::check()) {
+            $datos = request()->all();
+
+            $fecha = date('Y-m-d  H:i:s');
+
+            $Respuesta = \App\RespMultPregMEPruebaSimulacro::Guardar($datos, $fecha);
+
+            $Sesiones = \App\sesiones::Guardar(Auth::user()->id);
+
+            if ($datos['PosPreg'] === "Ultima") {
+                $LibroCalif = \App\LibroPruebaModuloE::Guardar($datos, $Respuesta['RegViejo'], $Respuesta['RegNuevo'], $fecha);
+
+                $Log = \App\Log::Guardar('Pregunta Desarrollada Simulacro', $datos['idSimulacro']);
+
+                $Sesion = \App\DetaSesionesSimul::ConsultarSesion($datos['IdSesion']);
+                $SesAre = \App\SessionArea::ConsultarAreasSesion($datos['IdSesion']);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'SesAre' => $SesAre,
+                        'Sesion' => $Sesion,
+                    ]);
+                }
+            } else {
+                $LibroCalif = \App\LibroPruebaModuloE::Guardar($datos, $Respuesta['RegViejo'], $Respuesta['RegNuevo'], $fecha);
+
+                if ($Respuesta) {
+                    if (request()->ajax()) {
+                        return response()->json([
+                            'Resp' => 'guardada',
+                        ]);
+                    }
+                }
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function guadarInicioSesion()
+    {
+        $datos = request()->all();
+        $Sesion = \App\SesionAlumnos::Consultar($datos);
+        if ($Sesion->count() == 0) {
+            $Sesion = \App\SesionAlumnos::Guardar($datos);
+        }
+        if (request()->ajax()) {
+            return response()->json([
+                'Sesion' => $Sesion,
+
+            ]);
+        }
+    }
+    
+    public function GuardarSesionEstudiante()
+    {
+        if (Auth::check()) {
+            $datos = request()->all();
+            $flagt = "1";
+
+            $DetaSesion = \App\SesionAlumnos::Editar($datos);
+            $DetaSesion = \App\SesionAlumnos::ConsultarTodo($datos);
+
+
+
+            foreach ($DetaSesion as $ses) {
+                if ($ses->estado != "FINALIZADA") {
+                    $flagt = "0";
+                }
+            }
+
+            if ($flagt == "1") {
+                $Simula = \App\simulacrosEstudiantes::guardar($datos);
+            }
+
+            //   $areaSesion = \App\SesionAlumnos::Guardar($datos);
+            if (request()->ajax()) {
+                return response()->json([
+                    'DetaSesion' => $DetaSesion,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su sesión ha Terminado");
+        }
+    }
 
     public function CargarTemasModuloE()
     {

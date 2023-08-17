@@ -30,8 +30,7 @@
                                 <!-- image -->
                                 @foreach ($imgmodulo as $img)
                                     @if ($Modu->id == $img->modulo_img)
-                                        @if (Session::get('NOMBREST') != '')
-                                            <a
+                                        @if (Session::get('NOMBREST') != '')                                            <a
                                                 href="{{ url('/Contenido/PresentacionContMod/' . $Modu->id . '/' . Auth::user()->id) }}">
                                             @else
                                                 <a href="{{ url('/Contenido/GradosxEstudMod/' . $Modu->id) }}">
@@ -42,8 +41,6 @@
                                         </a>
                                     @endif
                                 @endforeach
-
-
 
                                 <!-- blog-box-caption -->
                                 <div class="blog-box-caption">

@@ -78,7 +78,7 @@
                         <div class="blog-box-footer">
                             <!-- Button -->
                             <div class="text-center col-md-12">
-                                <a onclick="$.EntrarEntrenamiento();" class="btn btn-primary ">Entrar</a>
+                                <a href="{{ url('/ModuloE/CargarSimulacros') }}" class="btn btn-primary ">Entrar</a>
                             </div>
                         </div>
                         <!-- /blog-box-footer -->
@@ -123,7 +123,7 @@
 
 
 
-                                <!-- /contact)form-->
+                                <!-- /contactform-->
                             </div>
                             <!-- /contact-info-->
                             <div class="col-lg-12">
@@ -258,9 +258,9 @@
                     </div>
                 </div>
             </div>
-    
 
-            <a class="custom-link float-right mt-2" style="cursor: pointer;" id="btn-atras">Atras</a>
+             <a class="custom-link float-right mt-2" onclick="javascript: history.back();" style="cursor: pointer;"
+                id="btn-atras">Atras</a>
 
         </div>
         </div>
@@ -1267,12 +1267,13 @@
 
 
                                     } else {
-                                        $.AtrasModActIni('F');
+                                        $("#listPracticas").show();
+                                        $("#Div_DetEval").hide();
                                     }
                                 });
                             } else {
-                                $("#Div_ListEva").hide();
-                                $("#Div_DetEval").show();
+                                {{--  $("#Div_ListEva").hide();
+                                $("#Div_DetEval").show();  --}}
 
                             }
 
@@ -1289,6 +1290,7 @@
                     var form = $("#formAuxiliarCargEval");
                     var Preg = $("#id-pregunta" + id).val();
                     var tipo = $("#tip-pregunta" + id).val();
+                    var IdEval = $("#IdEval").val();
 
                     var opci = "";
                     var parr = "";
@@ -1296,10 +1298,14 @@
 
                     $("#Pregunta").remove();
                     $("#TipPregunta").remove();
-                    form.append("<input type='hidden' name='Pregunta' id='Pregunta' value='" +
+                    form.append("<input type='hidden' name='PreguntaResp' id='Pregunta' value='" +
                         Preg + "'>");
                     form.append(
                         "<input type='hidden' name='TipPregunta' id='TipPregunta' value='" + tipo +
+                        "'>"
+                    );
+                    form.append(
+                        "<input type='hidden' name='idEvaVerResp' id='idEvaVerResp' value='" + IdEval +
                         "'>"
                     );
                     var url = form.attr("action");

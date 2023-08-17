@@ -79,6 +79,19 @@ Route::post('/ModuloE/cargarAsignaturas', 'ContenidoModuloE@cargarAsignaturas');
 Route::post('/ModuloE/CargarTemasModuloE', 'ContenidoModuloE@CargarTemasModuloE');
 Route::post('/ModuloE/CargaDetTemasModuloE', 'ContenidoModuloE@CargaDetTemasModuloE');
 Route::post('/ModuloE/CargarPracticas', 'ContenidoModuloE@CargarPracticas');
+Route::get('/ModuloE/CargarSimulacros', 'ContenidoModuloE@CargarSimulacros');
+Route::post('/ModuloE/ConsultarSimulacros', 'ContenidoModuloE@ConsultarSimulacros');
+Route::post('/ModuloE/ConsultarSesiones', 'ContenidoModuloE@ConsultarSesiones');
+Route::post('/ModuloE/ConsultarAreasxSesion', 'ContenidoModuloE@ConsultarAreasxSesion');
+Route::post('/ModuloE/ConsultarPreguntasAreas', 'ContenidoModuloE@ConsultarPreguntasAreas');
+Route::post('/ModuloE/consulPregAlumnoSimu', 'ContenidoModuloE@consulPregAlumnoSimu');
+Route::post('/ModuloE/RespSimulacro', 'ContenidoModuloE@RespSimulacro');
+Route::post('/ModuloE/GuardarSesionEstudiante', 'ContenidoModuloE@GuardarSesionEstudiante');
+Route::post('/ModuloE/guadarInicioSesion', 'ContenidoModuloE@guadarInicioSesion');
+
+
+
+
 
 
 

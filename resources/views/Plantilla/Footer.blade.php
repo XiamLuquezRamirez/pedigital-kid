@@ -57,6 +57,10 @@
 <script src="{{asset('js/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
 <script src="{{asset('js/ckeditor/styles.js')}}" type="text/javascript"></script>
 <script src="{{asset('js/jquery.zoom.js') }}" type="text/javascript"></script>
+<script src="{{asset('js/avnPlugin.js')}}" type="text/javascript"></script>
+
+<script src="{{asset('js/avnSkeleton/avnSkeleton.js')}}" type="text/javascript"></script>
+
 
 
 
