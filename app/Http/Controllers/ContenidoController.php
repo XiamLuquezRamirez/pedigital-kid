@@ -410,7 +410,7 @@ class ContenidoController extends Controller
         $NAlumno = $Alumno->nombre_alumno ." ".$Alumno->apellido_alumno;
         $Gradoalumno = $Alumno->grado_alumno;
         Session::put('moduloEAct', 'SI');
-        return view('ModuloE.Principal', compact( 'NAlumno', 'Gradoalumno'));
+        return view('ModuloE.principal', compact( 'NAlumno', 'Gradoalumno'));
         }else{
             return redirect("/");
 
