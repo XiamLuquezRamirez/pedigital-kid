@@ -35,7 +35,7 @@ class AsigProf extends Model {
                 ->leftjoin("modulos", 'modulos.id', "asig_prof.grado")
                 ->where('asig_prof.grado', $id)
                 ->where('asig_prof.grupo', Session::get('GRUPO'))
-                ->where('profesores.jornada', Session::get('JORNADA'))
+                ->where('asig_prof.jornada', Session::get('JORNADA'))
                 ->where('modulos.grado_modulo', Auth::user()->grado_usuario)
                 ->select('profesores.*')
                 ->first();

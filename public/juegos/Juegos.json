@@ -83,6 +83,13 @@
     "area": "LC",
     "icono": "iconos/LasConsonantes.png"
   },
+  {
+    "grado": "1",
+    "juego": "Escucha",
+    "ruta": "AreaLenguaje/Escucha/index.html",
+    "area": "LC",
+    "icono": "iconos/Escucha.png"
+  },
    {
     "grado": "2",
     "juego": "The kingdoms",

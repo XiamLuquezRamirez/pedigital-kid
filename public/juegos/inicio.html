@@ -118,7 +118,7 @@
                         let datos = JSON.parse(xhttp.responseText);
 
                         let arrayJuegos = datos.filter((e) => e.grado == ParaGrad[1] && e.area == ParaArea[1]);
-
+                       
                         for (let itemJueg of arrayJuegos) {
                             ListadoJuegos += '<div onclick="ver_juego(\'' + itemJueg.ruta + '\')"  class="col-lg-4 juego pr-5">' + '<div id="suma">' + '<img src="' + itemJueg.icono + '" width="100%" alt=""><br>' + '</div>' + '</div>';
                         }

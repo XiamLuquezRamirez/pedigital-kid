@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
-use Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class ModProf extends Model
 {
@@ -23,7 +23,7 @@ class ModProf extends Model
             ->join("grados_modulos", 'grados_modulos.id', "mod_prof.grado")
             ->where('mod_prof.grado', $id)
             ->where('mod_prof.grupo', Session::get('GRUPO'))
-            ->where('profesores.jornada', Session::get('JORNADA'))
+            ->where('mod_prof.jornada', Session::get('JORNADA'))
             ->where('grados_modulos.grado_modulo', Auth::user()->grado_usuario)
             ->select('profesores.*')
             ->first();
